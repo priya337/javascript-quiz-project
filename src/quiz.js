@@ -1,39 +1,58 @@
 class Quiz {
-    // YOUR CODE HERE:
-    
-    constructor (questions, timeLimit, timeRemaining) {
-        this.questions = questions;
-        this.timeLimit= timeLimit;
-        this.timeRemaining = timeRemaining;
-        this.correctAnswers = 0;
-        this.currentQuestionIndex = 0;
-    }
+  // YOUR CODE HERE:
 
-   getQuestion() {
+  constructor(questions, timeLimit, timeRemaining) {
+    this.questions = questions;
+    this.timeLimit = timeLimit;
+    this.timeRemaining = timeRemaining;
+    this.correctAnswers = 0;
+    this.currentQuestionIndex = 0;
+  }
+
+  getQuestion() {
     return this.questions[this.currentQuestionIndex]
-   }
-    
-    moveToNextQuestion() {
-        this.currentQuestionIndex += 1;
-    }
+  }
 
-    shuffleQuestions(){
-        for(let i = this.questions.length-1; i>0; i--)
-            {
-              const j = Math.floor(Math.random() * (this.questions.length));
-              this.questions[i] = this.questions[j];
-            }
-    }
+  moveToNextQuestion() {
+    this.currentQuestionIndex += 1;
+  }
 
-    checkAnswer(answer) {
-      if(this.questions[this.currentQuestionIndex].answer === answer) {
-        this.correctAnswers += 1;
-      }
+  shuffleQuestions() {
+    for (let i = this.questions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (this.questions.length));
+      this.questions[i] = this.questions[j];
     }
+  }
 
-   hasEnded(){
-    if(this.questions.length === this.currentQuestionIndex) {
-        return true;
+  checkAnswer(answer) {
+    if (this.questions[this.currentQuestionIndex].answer === answer) {
+      this.correctAnswers += 1;
+    }
+  }
+
+  hasEnded() {
+    if (this.questions.length === this.currentQuestionIndex) {
+      return true;
     } else return false
-   }
-}
+  }
+  //filterQuestionsByDifficulty(difficulty) {
+  // if (this.question.difficulty < 1 || this.question.difficulty > 3) return;
+  // this.questions.filter((question) => {
+  //      question.difficulty === difficulty
+
+  //    }
+  //  }
+  // Filter questions by difficulty
+  filterQuestionsByDifficulty(difficulty) {
+    // Check if the difficulty is a valid number between 1 and 3
+    if (typeof difficulty === 'number' && (difficulty >= 1 && difficulty <= 3)) {
+        // Update the questions array with filtered questions
+        this.questions = this.questions.filter(
+          (question) => question.difficulty === difficulty
+        );
+        // Reset current question index after filtering
+        this.currentQuestionIndex = 0;
+      }
+      // If invalid, do not modify the questions array
+    }
+  }
