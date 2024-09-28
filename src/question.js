@@ -10,7 +10,7 @@ shuffleChoices(){
   for(let i = this.choices.length-1; i>0; i--)
   {
     const j = Math.floor(Math.random() * (this.choices.length));
-    this.choices[i] = this.choices[j];
+    [this.choices[i], this.choices[j] ]= [this.choices[j], this.choices[i]];
   }
 }
 }

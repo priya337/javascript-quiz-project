@@ -144,41 +144,41 @@ document.addEventListener("DOMContentLoaded", () => {
     // Hint 2: You can use the `element.type`, `element.name`, and `element.value` properties to set the type, name, and value of an element.
     // Hint 3: You can use the `element.appendChild()` method to append an element to the choices container.
     // Hint 4: You can use the `element.innerText` property to set the inner text of an element.
-    // question.choices.forEach((choice) => {
-    //   const radioInput = document.createElement("input");
-    //   radioInput.type = "radio";
-    //   radioInput.name = "choice";
-    //   radioInput.value = choice;
+    question.choices.forEach((choice) => {
+      const radioInput = document.createElement("input");
+      radioInput.type = "radio";
+      radioInput.name = "choice";
+      radioInput.value = choice;
 
-    //   const radioLabel = document.createElement("label");
-    //   radioLabel.innerText = choice;
+      const radioLabel = document.createElement("label");
+      radioLabel.innerText = choice;
 
-    //   choiceContainer.appendChild(radioInput);
-    //   choiceContainer.appendChild(radioLabel);
-    //   choiceContainer.appendChild(document.createElement('br'))
-    // });
+      choiceContainer.appendChild(radioInput);
+      choiceContainer.appendChild(radioLabel);
+      choiceContainer.appendChild(document.createElement('br'))
+    });
 
-    for(let i= 0; i<quiz.questions[quiz.currentQuestionIndex].choices.length; i++) {
-      // const radioInput = document.createElement("input");
-      // radioInput.type = "radio";
-      // radioInput.name = "choice";
-      // radioInput.value = question.choices[i];
+    // for(let i= 0; i<quiz.questions[quiz.currentQuestionIndex].choices.length; i++) {
+    //   // const radioInput = document.createElement("input");
+    //   // radioInput.type = "radio";
+    //   // radioInput.name = "choice";
+    //   // radioInput.value = question.choices[i];
 
-      // const radioLabel = document.createElement("label");
-      // radioLabel.innerText = question.choices[i];
+    //   // const radioLabel = document.createElement("label");
+    //   // radioLabel.innerText = question.choices[i];
 
-      // choiceContainer.appendChild(radioInput);
-      // choiceContainer.appendChild(radioLabel);
-      // choiceContainer.appendChild(document.createElement('br'))
+    //   // choiceContainer.appendChild(radioInput);
+    //   // choiceContainer.appendChild(radioLabel);
+    //   // choiceContainer.appendChild(document.createElement('br'))
 
-      const newDiv = document.createElement('div');
+    //   const newDiv = document.createElement('div');
 
-      newDiv.innerHTML = `  <input type="radio" name="choice" value=${quiz.questions[quiz.currentQuestionIndex].choices[i]}>
-          <label>${quiz.questions[quiz.currentQuestionIndex].choices[i]}</label>
-        <br>`
+    //   newDiv.innerHTML = `  <input type="radio" name="choice" value=${quiz.questions[quiz.currentQuestionIndex].choices[i]}>
+    //       <label>${quiz.questions[quiz.currentQuestionIndex].choices[i]}</label>
+    //     <br>`
 
-      choiceContainer.appendChild(newDiv)  
-    }
+    //   choiceContainer.appendChild(newDiv)  
+    // }
   }
 
   function nextButtonHandler() {
@@ -207,9 +207,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Show the next question by calling the function `showQuestion()`.
     if(selectedAnswer !== undefined) {
       quiz.checkAnswer(selectedAnswer);
-      quiz.moveToNextQuestion();
-      showQuestion();
+      
     }
+    quiz.moveToNextQuestion();
+    showQuestion();
   }
 
   function showResults() {
