@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     )
   ];
   const quizDuration = 120; // 120 seconds (2 minutes)
+  let timerInterval; // Declare the variable for timer interval
 
   /************  QUIZ INSTANCE  ************/
   // Create a new Quiz instance object
@@ -47,9 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
   quiz.shuffleQuestions();
 
   /************  SHOW INITIAL CONTENT  ************/
-  const minutes = Math.floor(quiz.timeRemaining / 60).toString().padStart(2, "0");
-  const seconds = (quiz.timeRemaining % 60).toString().padStart(2, "0");
-  timeRemainingContainer.innerText = `${minutes}:${seconds}`;
+  updateTimeRemaining();
 
   // Show first question
   showQuestion();
@@ -69,6 +68,30 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /************  FUNCTIONS  ************/
+  
+  // Function to start the quiz timer
+  function startTimer() {
+    clearInterval(timerInterval); // Clear any existing interval
+
+    timerInterval = setInterval(() => {
+      quiz.timeRemaining--;
+
+      updateTimeRemaining();
+
+      if (quiz.timeRemaining <= 0) {
+        clearInterval(timerInterval); // Stop the timer when time runs out
+        showResults(); // End the quiz
+      }
+    }, 1000);
+  }
+
+  // Function to update the time remaining display
+  function updateTimeRemaining() {
+    const minutes = Math.floor(quiz.timeRemaining / 60).toString().padStart(2, "0");
+    const seconds = (quiz.timeRemaining % 60).toString().padStart(2, "0");
+    timeRemainingContainer.innerText = `${minutes}:${seconds}`;
+  }
+
   function showQuestion() {
     if (quiz.hasEnded()) {
       showResults();
@@ -118,15 +141,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (selectedAnswer !== undefined) {
       quiz.checkAnswer(selectedAnswer);
+      quiz.moveToNextQuestion();
+      showQuestion();
     }
-    quiz.moveToNextQuestion();
-    showQuestion();
+    //quiz.moveToNextQuestion();
+    //showQuestion();
   }
 
   function showResults() {
+    clearInterval(timerInterval); // Stop the timer
     quizView.style.display = "none";
     endView.style.display = "flex";
-    resultContainer.innerText = `You scored ${quiz.score} out of ${questions.length} correct answers!`;
+    resultContainer.innerText = `You scored ${quiz.correctAnswers} out of ${questions.length} correct answers!`;
   }
 
   function restartQuiz() {
@@ -138,9 +164,16 @@ document.addEventListener("DOMContentLoaded", () => {
     quizView.style.display = "block";
     endView.style.display = "none";
 
+    // Reset the timer
+    updateTimeRemaining();
+    startTimer(); // Restart the timer
+
     // Show the first question
     showQuestion();
 
     console.log('Quiz restarted');
   }
+
+  // Start the quiz timer when the quiz begins
+  startTimer();
 });
