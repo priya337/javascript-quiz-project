@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const timeRemainingContainer = document.getElementById("timeRemaining");
 
   /************  QUIZ DATA  ************/
-  
+
   // Array with the quiz questions
   const questions = [
     new Question("What is 2 + 2?", ["3", "4", "5", "6"], "4", 1),
@@ -53,13 +53,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // Show first question
   showQuestion();
 
+
   /************  EVENT LISTENERS  ************/
   nextButton.addEventListener("click", nextButtonHandler);
 
   const restartButton = document.getElementById("restartButton");
   if (restartButton) {
     // Add event listener for the restart button
-    restartButton.addEventListener('click', function() {
+    restartButton.addEventListener('click', function () {
       console.log('Restart button clicked');
       restartQuiz();
     });
@@ -67,8 +68,15 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error('Restart button not found');
   }
 
+  // Event listener for End Quiz button
+  endQuizButton.addEventListener('click', function () {
+    clearInterval(timerInterval); // Stop the timer
+    showResults(); // Show results
+  });
+
+
   /************  FUNCTIONS  ************/
-  
+
   // Function to start the quiz timer
   function startTimer() {
     clearInterval(timerInterval); // Clear any existing interval
