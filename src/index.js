@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ["E = mc^2", "E = m*c^2", "E = m*c^3", "E = m*c"],
       "E = mc^2",
       3
-    )
+    ),
   ];
   const quizDuration = 120; // 120 seconds (2 minutes)
   let timerInterval; // Declare the variable for timer interval
@@ -53,27 +53,25 @@ document.addEventListener("DOMContentLoaded", () => {
   // Show first question
   showQuestion();
 
-
   /************  EVENT LISTENERS  ************/
   nextButton.addEventListener("click", nextButtonHandler);
 
   const restartButton = document.getElementById("restartButton");
   if (restartButton) {
     // Add event listener for the restart button
-    restartButton.addEventListener('click', function () {
-      console.log('Restart button clicked');
+    restartButton.addEventListener("click", function () {
+      console.log("Restart button clicked");
       restartQuiz();
     });
   } else {
-    console.error('Restart button not found');
+    console.error("Restart button not found");
   }
 
   // Event listener for End Quiz button
-  endQuizButton.addEventListener('click', function () {
+  endQuizButton.addEventListener("click", function () {
     clearInterval(timerInterval); // Stop the timer
     showResults(); // Show results
   });
-
 
   /************  FUNCTIONS  ************/
 
@@ -86,6 +84,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       updateTimeRemaining();
 
+      if (quiz.timeRemaining === quizDuration / 2) {
+        showAlert();
+      }
+
       if (quiz.timeRemaining <= 0) {
         clearInterval(timerInterval); // Stop the timer when time runs out
         showResults(); // End the quiz
@@ -95,7 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to update the time remaining display
   function updateTimeRemaining() {
-    const minutes = Math.floor(quiz.timeRemaining / 60).toString().padStart(2, "0");
+    const minutes = Math.floor(quiz.timeRemaining / 60)
+      .toString()
+      .padStart(2, "0");
     const seconds = (quiz.timeRemaining % 60).toString().padStart(2, "0");
     timeRemainingContainer.innerText = `${minutes}:${seconds}`;
   }
@@ -115,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
     questionContainer.innerText = question.text;
 
     const total = questions.length;
-    const current = (questions.indexOf(question)) + 1;
+    const current = questions.indexOf(question) + 1;
 
     const percentage = (current / total) * 100;
     progressBar.style.width = `${percentage}%`;
@@ -129,18 +133,20 @@ document.addEventListener("DOMContentLoaded", () => {
       radioInput.value = choice;
 
       const radioLabel = document.createElement("label");
+      radioLabel.value = choice;
       radioLabel.innerText = choice;
 
       choiceContainer.appendChild(radioInput);
       choiceContainer.appendChild(radioLabel);
-      choiceContainer.appendChild(document.createElement('br'));
+      choiceContainer.appendChild(document.createElement("br"));
     });
   }
 
   function nextButtonHandler() {
-    let selectedAnswer;
-
-    const choiceElements = document.querySelectorAll("#choices input[type=radio]");
+    let selectedAnswer;    
+    const choiceElements = document.querySelectorAll(
+      "#choices input[type=radio]"
+    );
     choiceElements.forEach((choice) => {
       if (choice.checked) {
         selectedAnswer = choice.value;
@@ -148,9 +154,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     if (selectedAnswer !== undefined) {
-      quiz.checkAnswer(selectedAnswer);
-      quiz.moveToNextQuestion();
-      showQuestion();
+      const wasCorrect = quiz.checkAnswer(selectedAnswer);
+      
+      const allChoices = choiceContainer.querySelectorAll("label")
+      for(let i=0; i<allChoices.length; i++ ) {
+       if( allChoices[i].value === selectedAnswer && wasCorrect) {
+          console.log("that was the right answer", allChoices[i])
+          allChoices[i].classList.add("correct-answer")
+       }else if( allChoices[i].value === selectedAnswer && !wasCorrect) {
+        console.log("that was the right answer", allChoices[i])
+        allChoices[i].classList.add("incorrect-answer")
+     }
+
+      }
+      
+      
+      setTimeout(() => {
+        quiz.moveToNextQuestion()
+        showQuestion();
+        console.log('clicked!')
+      }, 1000);
+      
     }
     //quiz.moveToNextQuestion();
     //showQuestion();
@@ -179,9 +203,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Show the first question
     showQuestion();
 
-    console.log('Quiz restarted');
+    console.log("Quiz restarted");
   }
 
+  function showAlert() {
+    alert("You have one minute left!");
+  }
   // Start the quiz timer when the quiz begins
   startTimer();
 });
